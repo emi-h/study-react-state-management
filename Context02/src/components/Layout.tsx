@@ -1,15 +1,15 @@
-import { Children, FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import Header from "src/components/Header";
 
 type Props = {
   children: ReactNode;
-  todoCount: number;
 };
 
-export const Layout: FC<Props> = ({ children, todoCount }) => {
+export const Layout: FC<Props> = ({ children }) => {
+  console.log("layout comp");
   return (
     <>
-      <Header todoCount={todoCount} />
+      <Header />
       <main>{children}</main>
     </>
   );

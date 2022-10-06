@@ -1,13 +1,11 @@
 import type { NextPage } from "next";
-import { ComponentProps, Dispatch, SetStateAction } from "react";
-import Header from "src/components/Header";
-import { Todo } from "src/types";
+import { ComponentProps, useContext } from "react";
+import { TodoContext } from "src/pages/_app";
 
-type Props = {
-  setTodos: Dispatch<SetStateAction<Todo[]>>;
-};
+const Add: NextPage = () => {
+  console.log("add comp");
+  const { setTodos } = useContext(TodoContext);
 
-const Add: NextPage<Props> = ({ setTodos }) => {
   const handleSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
     // フォームのデフォルトの挙動はOFF
     event.preventDefault();

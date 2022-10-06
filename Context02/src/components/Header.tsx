@@ -1,16 +1,9 @@
 import Link from "next/link";
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { TodoCounter } from "src/components/TodoCounter";
-import { LangContext, ThemeContext } from "src/pages/_app";
 
-type Props = {
-  todoCount: number;
-};
-
-export const Header: FC<Props> = ({ todoCount }) => {
-  const theme = useContext(ThemeContext);
-  const lang = useContext(LangContext);
-  console.log({ theme, lang });
+export const Header: FC = () => {
+  console.log("header comp");
 
   return (
     <header>
@@ -27,7 +20,7 @@ export const Header: FC<Props> = ({ todoCount }) => {
           <a>TODO追加</a>
         </Link>
       </nav>
-      <TodoCounter todoCount={todoCount} />
+      <TodoCounter />
     </header>
   );
 };
