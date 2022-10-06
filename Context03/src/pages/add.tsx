@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
-import { ComponentProps, useContext } from "react";
-import { TodoContext } from "src/pages/_app";
+import { ComponentProps } from "react";
+import { useTodosDispatch } from "src/state/Todo";
 
 const Add: NextPage = () => {
   console.log("add comp");
-  const { setTodos } = useContext(TodoContext);
+  const { addTodo } = useTodosDispatch();
 
   const handleSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
     // フォームのデフォルトの挙動はOFF
@@ -12,10 +12,7 @@ const Add: NextPage = () => {
     // テキスト取得　Uncontrolled Components
     const text = event.currentTarget.text.value;
     //
-    setTodos((prevTodos) => {
-      const newTodo = { id: prevTodos.length + 1, text, isDone: false };
-      return [...prevTodos, newTodo];
-    });
+    addTodo(text);
     // テキストをリセット
     event.currentTarget.reset();
   };
