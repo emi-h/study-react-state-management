@@ -24,7 +24,9 @@ const Home: NextPage<Props> = ({ setTodos }) => {
     //     return todo;
     //   });
     // });
-    dispatch(toggleTodo(id));
+
+    // idはオブジェクトで送る
+    dispatch(toggleTodo({ id }));
   };
 
   return (

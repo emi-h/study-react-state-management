@@ -1,57 +1,56 @@
-import { Reducer, useDebugValue } from "react";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Todo } from "src/types";
 
-// 🌟const
-const ADD_TODO = "ADD_TODO";
-const TOGGLE_TODO = "TOGGLE_TODO";
-
-// 🌟action
-//後でView側から使われるAction
-export const addTodo = (text: Todo["text"]) => {
-  // as constでワイドニング防止("ADD_TODO"をストリングリテラルタイプに)
-  return { type: ADD_TODO, payload: { text } } as const;
-};
-export const toggleTodo = (id: Todo["id"]) => {
-  // as constでワイドニング防止("ADD_TODO"をストリングリテラルタイプに)
-  return { type: TOGGLE_TODO, payload: { id } } as const;
-};
-
-// addTodoの返り値を受け取るためにReturnType(TypeScriptの組込み)を使用
-type Action = ReturnType<typeof addTodo | typeof toggleTodo>;
-
-// 🌟initial state
-const TODOS: Todo[] = [
+const initialState: Todo[] = [
   { id: 1, text: "foo", isDone: false },
   { id: 2, text: "foo2", isDone: true },
 ];
 
-// 🌟reducer
-//[point!!] prev state + action =new state
-// 新しい状態を返す
-export const todosReducer: Reducer<Todo[], Action> = (
-  state = TODOS,
-  action
-) => {
-  // switchでactionを絞り込む
-  switch (action.type) {
-    case ADD_TODO: {
-      const newTodo = {
+const todosSlice = createSlice({
+  name: "todos",
+  initialState, //keyとvalueが同じなので省略
+  reducers: {
+    // Redux Toolkit allows us to write "mutating" logic in reducers. It
+    // doesn't actually mutate the state because it uses the Immer library,
+    // which detects changes to a "draft state" and produces a brand new
+    // immutable state based off those changes
+    addTodo: (state, action: PayloadAction<Pick<Todo, "text">>) => {
+      // ▼▼▼[mutable way]
+      state.push({
         id: state.length + 1,
         text: action.payload.text,
         isDone: false,
-      };
-      return [...state, newTodo];
-    }
-    case TOGGLE_TODO: {
-      return state.map((todo) => {
-        if (todo.id === action.payload.id) {
-          return { ...todo, isDone: !todo.isDone };
-        }
-        return todo;
       });
-    }
-    default: {
-      return state;
-    }
-  }
-};
+
+      // ▼▼▼[immutable way]
+      // const newTodo = {
+      //   id: state.length + 1,
+      //   text: action.payload.text,
+      //   isDone: false,
+      // };
+      // return [...state, newTodo];
+    },
+    toggleTodo: (state, action: PayloadAction<Pick<Todo, "id">>) => {
+      // ▼▼▼[mutable way]
+      state.forEach((todo) => {
+        if (todo.id === action.payload.id) {
+          todo.isDone = !todo.isDone;
+        }
+      });
+
+      // ▼▼▼[immutable way]
+      // const newState = state.map((todo) => {
+      //   if (todo.id === action.payload.id) {
+      //     return { ...todo, isDone: !todo.isDone };
+      //   }
+      //   return todo;
+      // });
+      // return newState;
+    },
+  },
+});
+
+// reducerがactionsに入っているのでexport
+// 分割代入すれば個数が多くなってもOK
+export const { addTodo, toggleTodo } = todosSlice.actions;
+export const todosReducer = todosSlice.reducer;

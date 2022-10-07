@@ -8,14 +8,9 @@ const Add: NextPage = () => {
 
   const handleSubmit: ComponentProps<"form">["onSubmit"] = (event) => {
     event.preventDefault();
-    const text = event.currentTarget.text.value;
-
-    // setTodos((prevTodos) => {
-    //   const newTodo = { id: prevTodos.length + 1, text, isDone: false };
-    //   return [...prevTodos, newTodo];
-    // });
-    dispatch(addTodo(text));
-
+    const text: string = event.currentTarget.text.value;
+    // textはオブジェクトで送る
+    dispatch(addTodo({ text }));
     event.currentTarget.reset();
   };
 
